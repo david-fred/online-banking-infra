@@ -1,0 +1,59 @@
+# --- Public Route Table (Routes to IGW) ---
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = { Name = "public-route-table" }
+}
+
+# Associate Public Subnets
+resource "aws_route_table_association" "public_1" {
+  subnet_id      = aws_subnet.public_1.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "public_2" {
+  subnet_id      = aws_subnet.public_2.id
+  route_table_id = aws_route_table.public.id
+}
+
+# --- Private App Route Tables (Routes to NAT) ---
+# AZ 1a Route Table
+resource "aws_route_table" "private_app_1" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_1.id
+  }
+
+  tags = { Name = "private-app-route-table-1a" }
+}
+
+resource "aws_route_table_association" "private_app_1" {
+  subnet_id      = aws_subnet.private_app_1.id
+  route_table_id = aws_route_table.private_app_1.id
+}
+
+# AZ 1b Route Table
+resource "aws_route_table" "private_app_2" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat_2.id
+  }
+
+  tags = { Name = "private-app-route-table-1b" }
+}
+
+resource "aws_route_table_association" "private_app_2" {
+  subnet_id      = aws_subnet.private_app_2.id
+  route_table_id = aws_route_table.private_app_2.id
+}
+
+# Note: Private DB subnets intentionally left out so they default to the local VPC route.
