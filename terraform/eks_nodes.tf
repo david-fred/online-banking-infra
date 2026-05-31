@@ -36,7 +36,7 @@ resource "aws_eks_node_group" "main" {
   node_group_name = "capstone-node-group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
 
-  version         = "1.30"
+  version = "1.30"
 
   # Deploying nodes ONLY into Private App Subnets
   subnet_ids = [
