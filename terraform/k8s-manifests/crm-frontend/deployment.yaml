@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crm-frontend-deployment
+  labels:
+    app: crm-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: crm-frontend
+  template:
+    metadata:
+      labels:
+        app: crm-frontend
+    spec:
+      containers:
+      - name: frontend-container
+        # Placeholder image. You will replace this with your actual MERN frontend image later
+        image: nginx:alpine 
+        ports:
+        - containerPort: 80
